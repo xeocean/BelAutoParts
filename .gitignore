@@ -2,7 +2,7 @@
 .git
 venv/
 __pycache__/
-json_to_sql/
+script/
 node_modules/
 *.sqlite3
 *.log
