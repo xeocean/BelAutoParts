@@ -1,0 +1,95 @@
+<div class="row d-flex ">
+	{% for part in parts %}
+		<div class="col-xl-2 col-md-4 col-sm-6 col-12 mb-3">
+			<a href="{% url 'AppParts:part_detail' part_id=part.part_id %}" class="text-decoration-none text-dark">
+				<div class="card h-100">
+					<img src="{{ part.image_url_part.url }}" class="card-img-top img-fluid p-2"
+					     alt="{{ part.part_name }}">
+					<div class="card-body d-flex flex-column justify-content-between border-top p-2">
+						<h6 class="card-title text-center">
+							{{ part.part_name }}
+						</h6>
+						<div class="card-text text-center">
+							<h6>{{ part.formatted_price }} &#8381;</h6>
+							<p>
+								{% if part.availability %}
+									<span class="text-success">Есть в наличии</span> <i class="bi bi-check-circle"></i>
+								{% else %}
+									<span class="text-danger">Нет в наличии</span> <i class="bi bi-x-circle"></i>
+								{% endif %}
+							</p>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	{% empty %}
+		<div class="col-12">
+			<h3 class="text-center">По вашему запросу ничего не найдено <i class="bi bi-emoji-smile-upside-down"></i>
+			</h3>
+		</div>
+	{% endfor %}
+</div>
+
+{% if parts.has_other_pages %}
+	<nav aria-label="Page navigation">
+		<ul class="pagination justify-content-center -dark">
+			{% if parts.has_previous %}
+				<li class="page-item">
+					<a class="page-link" href="?page=1" aria-label="First">
+						<i class="bi bi-caret-left-fill"></i>
+					</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" href="?page={{ parts.previous_page_number }}" aria-label="Previous">
+						<i class="bi bi-caret-left"></i>
+					</a>
+				</li>
+			{% else %}
+				<li class="page-item disabled">
+                <span class="page-link" aria-label="First">
+                    <i class="bi bi-caret-left-fill"></i>
+                </span>
+				</li>
+				<li class="page-item disabled">
+                <span class="page-link" aria-label="Previous">
+                    <i class="bi bi-caret-left"></i>
+                </span>
+				</li>
+			{% endif %}
+
+			{% for num in parts.paginator.page_range %}
+				{% if num >= parts.number|add:"-2" and num <= parts.number|add:"2" %}
+					<li class="page-item {% if num == parts.number %}active{% endif %}">
+						<a class="page-link" href="?page={{ num }}">{{ num }}</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+
+			{% if parts.has_next %}
+				<li class="page-item">
+					<a class="page-link" href="?page={{ parts.next_page_number }}" aria-label="Next">
+						<i class="bi bi-caret-right"></i>
+					</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" href="?page={{ parts.paginator.num_pages }}" aria-label="Last">
+						<i class="bi bi-caret-right-fill"></i>
+					</a>
+				</li>
+			{% else %}
+				<li class="page-item disabled">
+                <span class="page-link" aria-label="Next">
+                    <i class="bi bi-caret-right"></i>
+                </span>
+				</li>
+				<li class="page-item disabled">
+                <span class="page-link" aria-label="Last">
+                    <i class="bi bi-caret-right-fill"></i>
+                </span>
+				</li>
+			{% endif %}
+		</ul>
+	</nav>
+{% endif %}
+

@@ -1,0 +1,109 @@
+{% extends 'AppParts/base.html' %}
+{% block content %}
+
+	<div class="d-flex align-items-center mb-3">
+		<a href="{% url 'AppParts:models_view' mark_id=model.mark.mark_id %}" class="btn btn-danger mr-2">
+			<i class="bi bi-arrow-left-square"></i>
+		</a>
+		<h4 class="mb-0">{{ model.model_name }}</h4>
+	</div>
+
+	<div class="row">
+		<div class="col-xl-2 col-md-4 col-12 mb-3">
+			<div class="accordion" id="accordion">
+				{% for category in categories %}
+					<div class="card bg-dark text-light">
+						<div class="card-header" id="heading{{ category.category_id }}">
+							<h3 class="text-center mb-0">
+								<button class="btn btn-link shadow-none text-light" data-toggle="collapse"
+								        data-target="#collapse{{ category.category_id }}" aria-expanded="true"
+								        aria-controls="collapse{{ category.category_id }}">
+									{{ category.category_name }}
+								</button>
+							</h3>
+						</div>
+
+						<div id="collapse{{ category.category_id }}" class="collapse"
+						     aria-labelledby="heading{{ category.category_id }}" data-parent="#accordion">
+							<div class="card-body">
+								{% for subcategory in subcategories %}
+									{% if subcategory.category == category %}
+										<div class="form-check">
+											<input type="radio" name="subcategory"
+											       value="{{ subcategory.subcategory_id }}"
+											       id="subcategory_{{ subcategory.subcategory_id }}"
+											       class="subcategory-radio form-check-input"
+											       data-subcategory-id="{{ subcategory.subcategory_id }}">
+											<label for="subcategory_{{ subcategory.subcategory_id }}"
+											       class="subcategory-label form-check-label">{{ subcategory.subcategory_name }}</label>
+										</div>
+									{% endif %}
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+
+
+		<div class="col-xl-10 col-md-8 col-12 mb-3">
+			{# Вывод запчастей для каждой подкатегории или всех, если страница загружена #}
+			<div id="part-container"></div>
+			{# Вывод запчастей для каждой подкатегории или всех, если страница загружена #}
+		</div>
+	</div>
+
+
+	<script>
+        $(document).ready(function () {
+            let selectedSubcategory = null;  // Добавлено здесь
+
+            // Определение функции для загрузки запчастей
+            function loadParts(page) {
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'AppParts:get_parts' %}",
+	                headers: { 'X-CSRFToken': '{{ csrf_token }}' }, {#???#}
+                    data: {'subcategory': selectedSubcategory, 'page': page, 'model_id': {{ model.model_id }}},
+                    success: function (data) {
+                        $("#part-container").html(data.parts_html);
+
+                        // Подключаем обработчик для новых элементов на странице
+                        attachHandlers();
+                    },
+
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error("Error fetching parts:", errorThrown);
+                    }
+                });
+            }
+
+            // Загрузка деталей при загрузке страницы
+            loadParts(1);
+
+            // Обработчик для выбора подкатегории
+            $(".subcategory-radio").change(function () {
+                selectedSubcategory = $(this).val();  // Изменено здесь
+
+                // Загрузка деталей для выбранной подкатегории
+                loadParts(1);
+            });
+
+            // Обработчик для навигации по страницам
+            function attachHandlers() {
+                $(".pagination a").on("click", function (e) {
+                    e.preventDefault();
+                    let page = $(this).attr("href").split("=").pop();
+                    loadParts(page);
+                });
+            }
+
+            // Первоначальная подписка на обработчик
+            attachHandlers();
+        });
+
+	</script>
+
+{% endblock %}
+

@@ -1,0 +1,30 @@
+{% extends 'AppParts/base.html' %}
+{% block content %}
+
+	<div class="d-flex align-items-center mb-3">
+		<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger mr-2">
+			<i class="bi bi-arrow-left-square"></i>
+		</a>
+		<h4 class="mb-0">{{ mark.mark_name }}</h4>
+	</div>
+
+	<div class="row">
+		{% for model in models %}
+			<div class="col-lg-2 col-md-3 col-4 mb-3 align-items-center d-flex justify-content-center">
+				<a href="{% url 'AppParts:category_view' model_id=model.model_id %}"
+				   class="text-decoration-none text-dark">
+					<div class="text-center">
+						<img src="{{ model.image_url_model.url }}" alt="{{ model.model_name }}" class="img-fluid">
+						<h6 class="d-block">{{ model }}</h6>
+					</div>
+				</a>
+			</div>
+		{% empty %}
+			<div class="col-12">
+				<h3 class="text-center">По вашему запросу ничего не найдено <i
+						class="bi bi-emoji-smile-upside-down"></i></h3>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endblock %}

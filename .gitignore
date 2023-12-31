@@ -1,0 +1,9 @@
+.idea/
+.git
+venv/
+__pycache__/
+json_to_sql/
+node_modules/
+*.sqlite3
+*.log
+*.tmp

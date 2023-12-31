@@ -1,0 +1,99 @@
+{% load static %}
+{% load bootstrap4 %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Магазин автозапчастей</title>
+	{% bootstrap_css %}
+	{% bootstrap_javascript jquery='full' %}
+	<link href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}" rel="stylesheet">
+
+	<style>
+        /* Скрыть полосу прокрутки в WebKit браузерах (Chrome, Safari) */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+	</style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+	<a class="navbar-brand" href='#'>Магазин запчастей</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+	        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'AppParts:marks_view' %}">
+					<i class="bi bi-gear"></i> Подбор запчасти
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'AppParts:disassembly' %}">
+					<i class="bi bi-tools"></i> Разборки
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'AppParts:contact' %}">
+					<i class="bi bi-person"></i> Контакты
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'AppParts:about' %}">
+					<i class="bi bi-info-circle"></i> О нас
+				</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+
+<div class="container-fluid mt-3 mb-3">
+	<form class="form my-2 my-lg-0 order-lg-2 ml-lg-auto" method="get" action="{% url 'AppParts:parts_search' %}">
+		<div class="input-group">
+			<input class="form-control shadow-none" type="text" id="searchInput" name="search_query"
+			       placeholder="Поиск по артикулу, наименованию или описанию" required>
+			<div class="input-group-append">
+				<button class="btn btn-outline-success" type="submit">
+					<i class="bi bi-search"></i>
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<div class="container-fluid">
+	{% block content %}
+		<!-- Здесь будет контент каждой дочерней страницы -->
+	{% endblock %}
+</div>
+
+<!-- Подвал -->
+<div class="container-fluid bg-dark text-light">
+	<div class="row">
+		<div class="col-sm-6 col-12 pt-3 pb-3">
+			<h3>Карта сайта:</h3>
+			<a href="{% url 'AppParts:marks_view' %}" class="text-light"><i class="bi bi-gear"></i> Подбор запчасти</a><br>
+			<a href="{% url 'AppParts:disassembly' %}" class="text-light"><i class="bi bi-tools"></i> Разборки</a><br>
+			<a href="{% url 'AppParts:contact' %}" class="text-light"><i class="bi bi-person"></i> Контакты</a><br>
+			<a href="{% url 'AppParts:about' %}" class="text-light"><i class="bi bi-info-circle"></i> О нас</a>
+		</div>
+		<div class="col-sm-6 col-12 pt-sm-3 pb-3 text-sm-right">
+			<p class="mb-1"><i class="bi bi-envelope"></i> Почта: example@mail.com</p>
+			<p class="mb-1"><i class="bi bi-phone"></i> Телефон: +123456789</p>
+			<p class="mb-1"><i class="bi bi-geo-alt"></i> Адрес: Белгород, Садовая 7А</p>
+			<p class="mb-1"><i class="bi bi-chat-square-dots"></i> Мы в Telegram: @razbor_10</p>
+			<a href="{% url 'AppParts:contact' %}" class="text-light"><i class="bi bi-geo"></i> Схема проезда</a>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>
