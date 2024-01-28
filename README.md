@@ -1,8 +1,12 @@
 # Инструкция
 
-# Скачать и установить Python https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe
-# Скачать и установить Git https://github.com/git-for-windows/git/releases/download/v2.43.0.windows.1/Git-2.43.0-64-bit.exe
+# Скачать и установить Python 
+### https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe
+# Скачать и установить Git 
+### https://github.com/git-for-windows/git/releases/download/v2.43.0.windows.1/Git-2.43.0-64-bit.exe
+
 ### При установке добавить в переменную PATH
+
 # Выполнить команды в командной строке (cmd):
 
 ### 1. cd D:/ 
