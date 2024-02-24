@@ -9,15 +9,9 @@
 	<title>Магазин автозапчастей</title>
 	{% bootstrap_css %}
 	{% bootstrap_javascript jquery='full' %}
-	<link href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}" rel="stylesheet">
-
-	<style>
-        /* Скрыть полосу прокрутки в WebKit браузерах (Chrome, Safari) */
-        body::-webkit-scrollbar {
-            display: none;
-        }
-	</style>
-
+	<!-- Подключение Bootstrap Icons-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
 
@@ -69,17 +63,16 @@
 
 
 <div class="container-fluid">
-	{% block content %}
-		<!-- Здесь будет контент каждой дочерней страницы -->
-	{% endblock %}
+	{% block content %}{% endblock %}
 </div>
 
 <!-- Подвал -->
-<div class="container-fluid bg-dark text-light">
+<div class="container-fluid bg-dark text-light footer">
 	<div class="row">
 		<div class="col-sm-6 col-12 pt-3 pb-3">
 			<h3>Карта сайта:</h3>
-			<a href="{% url 'AppParts:marks_view' %}" class="text-light"><i class="bi bi-gear"></i> Подбор запчасти</a><br>
+			<a href="{% url 'AppParts:marks_view' %}" class="text-light"><i class="bi bi-gear"></i> Подбор
+				запчасти</a><br>
 			<a href="{% url 'AppParts:disassembly' %}" class="text-light"><i class="bi bi-tools"></i> Разборки</a><br>
 			<a href="{% url 'AppParts:contact' %}" class="text-light"><i class="bi bi-person"></i> Контакты</a><br>
 			<a href="{% url 'AppParts:about' %}" class="text-light"><i class="bi bi-info-circle"></i> О нас</a>
@@ -93,7 +86,6 @@
 		</div>
 	</div>
 </div>
-
 
 </body>
 </html>

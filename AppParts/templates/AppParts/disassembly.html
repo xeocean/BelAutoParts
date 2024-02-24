@@ -1,13 +1,6 @@
 {% extends 'AppParts/base.html' %}
 {% block content %}
 
-	<div class="d-flex align-items-center mb-3">
-		<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger mr-2">
-			<i class="bi bi-arrow-left-square"></i>
-		</a>
-		<h4 class="mb-0">Недавние разборки:</h4>
-	</div>
-
 	{% for disassembly in disassembly_list %}
 		<div class="card mb-3">
 			<div class="card-body">
