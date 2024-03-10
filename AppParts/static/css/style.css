@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito/Nunito-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body.custom-font {
+    font-family: 'Nunito', sans-serif;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -6,4 +17,8 @@ body {
 
 .footer {
     margin-top: auto;
+}
+
+a {
+    text-decoration: none !important;
 }

@@ -15,11 +15,15 @@ urlpatterns = [
     path('parts_search/', views.parts_search_view, name='parts_search'),
     path('disassembly/', views.disassembly, name='disassembly'),
     path('contact/', views.contact, name='contact'),
-    path('about/', views.about, name='about'),
+    # --------------------------------------------------------------------------
+    path('get_subcategories/', views.get_subcategories, name='get_subcategories'),
+    path('get_subcategories_nav/', views.get_subcategories_nav, name='get_subcategories_nav'),
+    path('get_models/', views.get_models, name='get_models'),
+    # --------------------------------------------------------------------------
+    path('catalog/<int:subcategory_id>', views.catalog_view, name='catalog_view'),
+
 ]
 
 # ONLY DEVELOPMENT
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-

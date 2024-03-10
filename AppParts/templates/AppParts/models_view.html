@@ -2,10 +2,9 @@
 {% block content %}
 
 	<div class="d-flex align-items-center mb-3">
-		<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger mr-2">
-			<i class="bi bi-arrow-left-square"></i>
+		<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger mr-2 shadow-none">
+			<i class="bi bi-arrow-left-square"> {{ mark.mark_name }}</i>
 		</a>
-		<h4 class="mb-0">{{ mark.mark_name }}</h4>
 	</div>
 
 	<div class="row">

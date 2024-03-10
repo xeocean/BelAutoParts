@@ -4,7 +4,7 @@
 	<div class="row">
 		{% for mark in marks %}
 			<div class="col-lg-2 col-md-3 col-4 align-items-center mb-3 d-flex justify-content-center">
-				<a href="{% url 'AppParts:models_view' mark_id=mark.mark_id %}" class="text-decoration-none text-dark">
+				<a href="{% url 'AppParts:models_view' mark_id=mark.mark_id %}" class="shadow-none text-dark">
 					<div class="text-center">
 						<img src="{{ mark.image_url_mark.url }}" alt="{{ mark.mark_name }}" class="img-fluid">
 						<h6 class="d-block">{{ mark }}</h6>

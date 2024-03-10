@@ -2,43 +2,44 @@
 {% block content %}
 
 	<div class="d-flex align-items-center mb-3">
-		<a href="{% url 'AppParts:models_view' mark_id=model.mark.mark_id %}" class="btn btn-danger mr-2 shadow-none">
+		<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger mr-2 shadow-none">
 			<i class="bi bi-arrow-left-square"></i>
 		</a>
 		<button class="navbar-toggler btn bg-dark text-light shadow-none" type="button" data-toggle="collapse"
 		        data-target="#accordion" aria-controls="accordion" aria-expanded="false" aria-label="Toggle accordion">
-			<h4 class="mb-0">{{ model.model_name }}</h4>
+			<h4 class="mb-0">{{ subcategories.subcategory_name }}</h4>
 		</button>
 	</div>
+
 
 	<div class="row">
 		<div class="col-xl-2 col-md-4 col-12 mb-3">
 			<div class="accordion" id="accordion">
-				{% for category in categories %}
+				{% for mark in marks %}
 					<div class="card bg-dark text-light">
-						<div class="card-header" id="heading{{ category.category_id }}">
+						<div class="card-header" id="heading{{ mark.mark_id }}">
 							<h3 class="text-center mb-0">
 								<button class="btn shadow-none text-light" data-toggle="collapse"
-								        data-target="#collapse{{ category.category_id }}" aria-expanded="false"
-								        aria-controls="collapse{{ category.category_id }}">
-									{{ category.category_name }}
+								        data-target="#collapse{{ mark.mark_id }}" aria-expanded="true"
+								        aria-controls="collapse{{ mark.mark_id }}">
+									{{ mark.mark_name }}
 								</button>
 							</h3>
 						</div>
 
-						<div id="collapse{{ category.category_id }}" class="collapse"
-						     aria-labelledby="heading{{ category.category_id }}" data-parent="#accordion">
+						<div id="collapse{{ mark.mark_id }}" class="collapse"
+						     aria-labelledby="heading{{ mark.mark_id }}" data-parent="#accordion">
 							<div class="card-body">
-								{% for subcategory in subcategories %}
-									{% if subcategory.category == category %}
+								{% for model in models %}
+									{% if model.mark == mark %}
 										<div class="form-check">
-											<input type="radio" name="subcategory"
-											       value="{{ subcategory.subcategory_id }}"
-											       id="subcategory_{{ subcategory.subcategory_id }}"
-											       class="subcategory-radio form-check-input"
-											       data-subcategory-id="{{ subcategory.subcategory_id }}">
-											<label for="subcategory_{{ subcategory.subcategory_id }}"
-											       class="subcategory-label form-check-label">{{ subcategory.subcategory_name }}</label>
+											<input type="radio" name="model"
+											       value="{{ model.model_id }}"
+											       id="model_{{ model.model_id }}"
+											       class="model-radio form-check-input"
+											       data-model-id="{{ model.model_id }}">
+											<label for="model_{{ model.model_id }}"
+											       class="model-label form-check-label">{{ model.model_name }}</label>
 										</div>
 									{% endif %}
 								{% endfor %}
@@ -60,7 +61,7 @@
 
 	<script>
         $(document).ready(function () {
-            let selectedSubcategory = null;  // Добавлено здесь
+            let selectedModel = null;  // Добавлено здесь
 
             // Определение функции для загрузки запчастей
             function loadParts(page) {
@@ -68,7 +69,7 @@
                     type: "GET",
                     url: "{% url 'AppParts:get_parts' %}",
                     headers: {'X-CSRFToken': '{{ csrf_token }}'}, {#???#}
-                    data: {'subcategory': selectedSubcategory, 'page': page, 'model_id': {{ model.model_id }}},
+                    data: {'model': selectedModel, 'page': page, 'subcategory_id': {{ subcategories.subcategory_id }}},
                     success: function (data) {
                         $("#part-container").html(data.parts_html);
 
@@ -86,8 +87,8 @@
             loadParts(1);
 
             // Обработчик для выбора подкатегории
-            $(".subcategory-radio").change(function () {
-                selectedSubcategory = $(this).val();  // Изменено здесь
+            $(".model-radio").change(function () {
+                selectedModel = $(this).val();  // Изменено здесь
 
                 // Загрузка деталей для выбранной подкатегории
                 loadParts(1);
@@ -109,4 +110,3 @@
 	</script>
 
 {% endblock %}
-
