@@ -5,7 +5,7 @@
 		<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger mr-2 shadow-none">
 			<i class="bi bi-arrow-left-square"></i>
 		</a>
-		<button class="navbar-toggler btn bg-dark text-light shadow-none" type="button" data-toggle="collapse"
+		<button id="navbar-toggler" class="navbar-toggler btn bg-dark text-light shadow-none" type="button" data-toggle="collapse"
 		        data-target="#accordion" aria-controls="accordion" aria-expanded="false" aria-label="Toggle accordion">
 			<h4 class="mb-0">{{ subcategories.subcategory_name }}</h4>
 		</button>
@@ -52,46 +52,69 @@
 
 
 		<div class="col-xl-10 col-md-8 col-12 mb-3">
+			<div class="col-12 mb-3 px-0">
+				<div class="btn-group" role="group" aria-label="Sort">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+					        aria-haspopup="true" aria-expanded="false">Сортировка
+					</button>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="?sort=price_asc">Цена: от меньшей к большей</a>
+						<a class="dropdown-item" href="?sort=price_desc">Цена: от большей к меньшей</a>
+						<a class="dropdown-item" href="?sort=name_asc">По алфавиту: A-Z</a>
+						<a class="dropdown-item" href="?sort=name_desc">По алфавиту: Z-A</a>
+					</div>
+				</div>
+			</div>
 			{# Вывод запчастей для каждой подкатегории или всех, если страница загружена #}
 			<div id="part-container"></div>
 			{# Вывод запчастей для каждой подкатегории или всех, если страница загружена #}
 		</div>
 	</div>
 
-
 	<script>
         $(document).ready(function () {
-            let selectedModel = null;  // Добавлено здесь
+            let selectedModel = null;
+            let sort = null
+            $(".navbar-toggler").trigger("click");
 
             // Определение функции для загрузки запчастей
             function loadParts(page) {
                 $.ajax({
                     type: "GET",
                     url: "{% url 'AppParts:get_parts' %}",
-                    headers: {'X-CSRFToken': '{{ csrf_token }}'}, {#???#}
-                    data: {'model': selectedModel, 'page': page, 'subcategory_id': {{ subcategories.subcategory_id }}},
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    data: {
+                        'model': selectedModel,
+                        'page': page,
+                        'subcategory_id': {{ subcategories.subcategory_id }},
+                        'sort': sort
+                    },
                     success: function (data) {
                         $("#part-container").html(data.parts_html);
-
-                        // Подключаем обработчик для новых элементов на странице
-                        attachHandlers();
+                        attachHandlers(); // Подключаем обработчик для новых элементов на странице
+                        if (window.matchMedia("(max-width: 767px)").matches) {
+                            $(".navbar-toggler").trigger("click");
+                        }
                     },
-
                     error: function (xhr, textStatus, errorThrown) {
                         console.error("Error fetching parts:", errorThrown);
                     }
                 });
             }
 
-            // Загрузка деталей при загрузке страницы
-            loadParts(1);
-
-            // Обработчик для выбора подкатегории
+            // Обработчик для выбора модели
             $(".model-radio").change(function () {
-                selectedModel = $(this).val();  // Изменено здесь
-
-                // Загрузка деталей для выбранной подкатегории
+                selectedModel = $(this).val();
                 loadParts(1);
+            });
+
+            // Обработчик для выбора сортировки
+            $(".btn-group a").on("click", function (e) {
+                e.preventDefault();
+                $(".btn-group a").removeClass("active"); // Удаляем класс active у всех кнопок
+                $(this).addClass("active"); // Добавляем класс active только выбранной кнопке
+                sort = $(this).attr("href").split("=").pop(); // Получаем значение сортировки из href выбранной кнопки
+                loadParts(1); // Загружаем запчасти с новой сортировкой
             });
 
             // Обработчик для навигации по страницам
@@ -103,8 +126,16 @@
                 });
             }
 
-            // Первоначальная подписка на обработчик
-            attachHandlers();
+            // Загрузка деталей при загрузке страницы
+            loadParts(1);
+
+	        // Отключение аккордеона
+            window.onload = function () {
+                let navbarToggler = document.getElementById("navbar-toggler");
+                if (window.innerWidth > 768) {
+                    navbarToggler.setAttribute("disabled", "true");
+                }
+            };
         });
 
 	</script>

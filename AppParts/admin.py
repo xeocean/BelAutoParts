@@ -12,16 +12,12 @@ class MarksAdmin(admin.ModelAdmin):
 
 @admin.register(Models)
 class ModelsAdmin(admin.ModelAdmin):
-    list_display = ['model_name_years', 'mark']
+    list_display = ['model_name', 'mark']
     list_filter = ['mark']
     ordering = ['mark']
     filter = ['mark']
     search_fields = ['model_name_years']
     list_per_page = 50
-
-    @admin.display(description='Название')
-    def model_name_years(self, obj):
-        return f'{obj.model_name} - {obj.model_years}'
 
 
 @admin.register(Categories)

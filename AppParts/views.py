@@ -39,6 +39,7 @@ def get_parts(request):
     selected_models = request.GET.getlist('model')
     model_id = request.GET.get('model_id')
     subcategory_id = request.GET.get('subcategory_id')
+    sort_by = request.GET.get('sort')  # Получаем параметр сортировки
 
     if model_id:
         # Проверяем, есть ли значения 'subcategory_id'
@@ -61,6 +62,16 @@ def get_parts(request):
     else:
         # Если отсутствуют идентификаторы, возвращаем пустой результат
         return JsonResponse({'parts_html': ''})
+
+    # Добавляем логику для сортировки
+    if sort_by == 'price_asc':
+        parts = parts.order_by('price')
+    elif sort_by == 'price_desc':
+        parts = parts.order_by('-price')
+    elif sort_by == 'name_asc':
+        parts = parts.order_by('part_name')
+    elif sort_by == 'name_desc':
+        parts = parts.order_by('-part_name')
 
     # Добавляем логику для пагинации
     items_per_page = 12

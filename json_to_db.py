@@ -7,7 +7,7 @@ django.setup()
 
 from AppParts.models import Marks, Models
 
-with open('to_db.json', 'r', encoding='utf-8') as file:
+with open('to_db_2.json', 'r', encoding='utf-8') as file:
     json_data = json.load(file)
 
 marks_list = []
