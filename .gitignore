@@ -5,5 +5,5 @@ __pycache__/
 *.sqlite3
 *.log
 *.tmp
-.env
+venv/.env
 migrations/
