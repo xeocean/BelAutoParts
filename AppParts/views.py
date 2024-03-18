@@ -1,9 +1,13 @@
+import requests
+from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
-from .models import Marks, Models, Categories, Subcategories, Parts, Disassembly
+
+from .forms import OrderForm
+from .models import Marks, Models, Categories, Subcategories, Parts, Disassembly, Orders
 
 
 def marks_view(request):
@@ -30,7 +34,34 @@ def category_view(request, model_id):
 
 def part_detail(request, part_id):
     part = get_object_or_404(Parts, part_id=part_id)
-    context = {'part': part}
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            # Проверка CAPTCHA
+            captcha_response = request.POST.get('g-recaptcha-response')
+            data = {
+                'secret': settings.RECAPTCHA_PRIVATE_KEY,
+                'response': captcha_response
+            }
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+            result = r.json()
+            if result['success']:
+                order_name = form.cleaned_data['order_name']
+                order_phone = form.cleaned_data['order_phone']
+                part_name = form.cleaned_data['part_name']
+                part_code = form.cleaned_data['part_code']
+                Orders.objects.create(order_name=order_name, order_phone=order_phone, part_name=part_name,
+                                      part_code=part_code)
+                message = 'Ваша заявка успешно отправлена!'
+                # Возвращаем JSON с сообщением для обновления содержимого модального окна
+                return JsonResponse({'message': message})
+            else:
+                # Если CAPTCHA не прошла, вы можете добавить соответствующее сообщение об ошибке
+                message = 'Пожалуйста, пройдите проверку CAPTCHA.'
+                return JsonResponse({'message': message}, status=400)
+    else:
+        OrderForm()
+    context = {'part': part, 'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY}
     return render(request, 'AppParts/parts_detail.html', context)
 
 
@@ -155,6 +186,13 @@ def get_models(request):
     return JsonResponse(data)
 
 
+def get_models_disassembly(request):
+    mark_id = request.GET.get('mark_id')
+    models = Models.objects.filter(mark_id=mark_id)
+    data = {model.model_id: model.model_name for model in models}
+    return JsonResponse(data)
+
+
 def get_subcategories_nav(request):
     category_id = request.GET.get('category_id')
     subcategories = Subcategories.objects.filter(category_id=category_id)
@@ -172,3 +210,5 @@ def catalog_view(request, subcategory_id):
     models = Models.objects.order_by('model_name')
     context = {'subcategories': subcategory, 'marks': marks, 'models': models}
     return render(request, 'AppParts/catalog_view.html', context)
+
+# --------------------------------

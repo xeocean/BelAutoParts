@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+
 # from dotenv import load_dotenv
 #
 # # Загрузка переменных окружения из файла .env
@@ -28,6 +29,9 @@ STATICFILES_DIRS = [
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-u-+1k)mvn#^gh2hsva6pdx1!0^a8&z-&@2)23%$u9$g!ekknhw'
+
+RECAPTCHA_PUBLIC_KEY = '6LclK5wpAAAAAM_86FtP0XVSdiLCZR1oSiaYMT5u'
+RECAPTCHA_PRIVATE_KEY = '6LclK5wpAAAAAPWNrIBpC-Gy1SZSNcihjX3kPV-T'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

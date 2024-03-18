@@ -1,7 +1,9 @@
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db import models
 from PIL import Image
-from datetime import date
+from datetime import date, datetime
+
+from django.utils import timezone
 
 
 class Marks(models.Model):
@@ -119,8 +121,26 @@ class Disassembly(models.Model):
         img.save(self.image_url_car.path)
 
     def __str__(self):
-        return self.disassembly_id
+        return f'{self.disassembly_id}'
 
     class Meta:
         verbose_name = 'Разборка'
         verbose_name_plural = 'Разборки'
+
+
+class Orders(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    order_name = models.CharField(max_length=20, verbose_name='Имя заказчика')
+    order_phone = models.CharField(max_length=20, verbose_name='Номер телефона')
+    order_date = models.DateTimeField(default=timezone.now, verbose_name='Дата заявки')
+    done = models.BooleanField(default=False, verbose_name='Выполнено')
+    part_name = models.CharField(max_length=100, verbose_name='Название')
+    part_code = models.CharField(max_length=50, verbose_name='Артикул')
+
+    def __str__(self):
+        return f'{self.order_id}'
+
+    class Meta:
+        verbose_name = 'Заявка'
+        verbose_name_plural = 'Заявки'
+

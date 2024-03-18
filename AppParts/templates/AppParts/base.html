@@ -6,7 +6,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>BelGears - Запчасти Белгород</title>
+	<title>BelPart - Запчасти Белгород</title>
+	<meta name="description"
+	      content="BelPart - магазин автозапчастей в Белгороде. Широкий ассортимент оригинальных и неоригинальных запчастей для автомобилей с авторазборок.">
+	<meta name="keywords"
+	      content="запчасти, автозапчасти, запчасти для автомобилей, авторазборки, Белгород, магазин запчастей, купить запчасти, оригинальные запчасти, неоригинальные запчасти">
 
 	{% bootstrap_css %}
 	{% bootstrap_javascript jquery='full' %}
@@ -20,7 +24,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
 	<a class="navbar-brand" href='#'>
 		<img src="{% static 'icon.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
-		BelGears </a>
+		BelPart </a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
 	        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -32,17 +36,14 @@
 					<i class="bi bi-gear"></i> Подбор запчасти
 				</a>
 			</li>
-			{#			#}
-
 			<li class="nav-item dropdown-center">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
 				   aria-haspopup="true" aria-expanded="false">
 					<i class="bi bi-tag"></i> Каталог
 				</a>
 
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown"
-				     style="margin: 10px; width: -webkit-fill-available;">
-					<div class="row">
+				<div class="dropdown-menu w-100 mt-0" aria-labelledby="navbarDropdown">
+					<div class="row mx-0">
 						<div class="col-md-6">
 							<h4 class="dropdown-header text-center">Категории</h4>
 							<ul class="list-unstyled">
@@ -67,9 +68,8 @@
 						</div>
 					</div>
 				</div>
-			</li>
 
-			{#			#}
+			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{% url 'AppParts:disassembly' %}">
 					<i class="bi bi-tools"></i> Разборки
@@ -87,17 +87,23 @@
 <div class="container-fluid mt-3 mb-3">
 	<form class="form my-2 my-lg-0 order-lg-2 ml-lg-auto" method="get" action="{% url 'AppParts:parts_search' %}">
 		<div class="input-group">
+			{% block early_page %}
+				<div class="input-group-append">
+					<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger shadow-none rounded-left">
+						<i class="bi bi-arrow-left-square"> {{ mark.mark_name }}</i>
+					</a>
+				</div>
+			{% endblock %}
 			<input class="form-control shadow-none" type="text" id="searchInput" name="search_query"
 			       placeholder="Поиск по артикулу, наименованию или описанию" required>
 			<div class="input-group-append">
-				<button class="btn btn-outline-success" type="submit">
+				<button class="btn btn-outline-success rounded-right" type="submit">
 					<i class="bi bi-search"></i>
 				</button>
 			</div>
 		</div>
 	</form>
 </div>
-
 
 <div class="container-fluid">
 	{% block content %}{% endblock %}
@@ -106,7 +112,7 @@
 <!-- Подвал -->
 <div class="container-fluid bg-dark text-light footer">
 	<div class="row">
-		<div class="col-sm-6 col-12 pt-3">
+		<div class="col-sm-6 col-12 py-3">
 			<h5>Карта сайта:</h5>
 			<a href="{% url 'AppParts:marks_view' %}" class="text-light text-decoration-none"><i class="bi bi-gear"></i>
 				Подбор
@@ -119,10 +125,14 @@
 		</div>
 		<div class="col-sm-6 col-12 pt-sm-3 text-sm-right">
 			<h5>Контактная информация:</h5>
-			<p class="mb-1"><i class="bi bi-envelope"></i> Почта: example@mail.com</p>
-			<p class="mb-1"><i class="bi bi-phone"></i> Телефон: +123456789</p>
-			<p class="mb-1"><i class="bi bi-geo-alt"></i> Адрес: Белгород, Садовая 7А</p>
-			<p class="mb-1"><i class="bi bi-chat-square-dots"></i> Мы в Telegram: @razbor_10</p>
+			<p class="mb-1"><i class="bi bi-envelope"></i> Почта: vova2001170256@gmail.com</p>
+			<p class="mb-1"><i class="bi bi-phone"></i> Владимир: <a class="text-light" href="tel:+79517648363">+7 951
+				764 83 63</a></p>
+			<p class="mb-1"><i class="bi bi-phone"></i> Алексей: <a class="text-light" href="tel:+79517639542">+7 951
+				763 95 42</a></p>
+			<p class="mb-1"><i class="bi bi-chat-square-dots"></i> Мы в Telegram: <a class="text-light"
+			                                                                         href="https://t.me/Vova_00117">@Vova_00117</a>
+			</p>
 		</div>
 	</div>
 </div>
@@ -156,6 +166,42 @@
                     });
                 }
             });
+        });
+    });
+</script>
+
+<script>
+    let arrow = document.createElement('div');
+    arrow.innerHTML = '<i class="bi bi-arrow-up-square"></i>';
+    arrow.style.position = 'fixed';
+    arrow.style.bottom = '20px';
+    arrow.style.right = '20px';
+    arrow.style.fontSize = '30px';
+    arrow.style.cursor = 'pointer';
+    arrow.style.opacity = '0'; // Начальное значение прозрачности
+    arrow.style.transition = 'opacity 0.5s ease'; // Плавная анимация изменения прозрачности
+    document.body.appendChild(arrow);
+
+    window.addEventListener('scroll', function() {
+        // Получаем текущую позицию прокрутки страницы
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        let scrollHeight = document.documentElement.scrollHeight;
+        let clientHeight = document.documentElement.clientHeight;
+
+        // Если пользователь близко к началу или концу страницы, показываем стрелку с плавным появлением
+        if (scrollTop > 100 && (scrollHeight - scrollTop - clientHeight) > 100) {
+            arrow.style.opacity = '1';
+        } else {
+            arrow.style.opacity = '0';
+        }
+    });
+
+    // Добавляем обработчик события клика на стрелку
+    arrow.addEventListener('click', function() {
+        // Плавно скроллим страницу вверх
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Включаем плавный скролл
         });
     });
 </script>

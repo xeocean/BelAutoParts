@@ -22,3 +22,19 @@ body {
 a {
     text-decoration: none !important;
 }
+
+/*.scroll-to-top {*/
+/*    position: fixed;*/
+/*    bottom: 20px;*/
+/*    right: 20px;*/
+/*    opacity: 0;*/
+/*    visibility: hidden;*/
+/*    transition: opacity 0.4s ease, visibility 0.4s ease;*/
+/*    background-color: #ffffff;*/
+/*    border: 1px solid #cccccc;*/
+/*    border-radius: 20%;*/
+/*}*/
+
+/*.scroll-to-top .btn {*/
+/*    border: none;*/
+/*}*/

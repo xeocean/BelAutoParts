@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Marks, Models, Categories, Subcategories, Parts, Disassembly
+from .models import Marks, Models, Categories, Subcategories, Parts, Disassembly, Orders
 
 
 @admin.register(Marks)
@@ -67,4 +67,17 @@ class DisassemblyAdmin(admin.ModelAdmin):
     search_fields = ['mark__mark_name', 'model__model_name']
     list_filter = ['mark']
     ordering = ['-date']
+    list_per_page = 50
+
+    class Media:
+        js = ('js/disassembly_admin.js',)
+
+
+@admin.register(Orders)
+class OrdersAdmin(admin.ModelAdmin):
+    list_display = ['order_name', 'order_phone', 'order_date', 'done', 'part_name', 'part_code']
+    search_fields = ['order_name', 'order_phone', 'order_date', 'part_name', 'part_code']
+    list_filter = ['done']
+    list_editable = ['done']
+    ordering = ['done', '-order_date']
     list_per_page = 50

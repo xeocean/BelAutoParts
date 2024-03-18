@@ -1,12 +1,6 @@
 {% extends 'AppParts/base.html' %}
 {% block content %}
 
-	<div class="d-flex align-items-center mb-3">
-		<a href="{% url 'AppParts:marks_view' %}" class="btn btn-danger mr-2 shadow-none">
-			<i class="bi bi-arrow-left-square"> {{ mark.mark_name }}</i>
-		</a>
-	</div>
-
 	<div class="row">
 		{% for model in models %}
 			<div class="col-lg-2 col-md-3 col-4 mb-3 align-items-center d-flex justify-content-center">
