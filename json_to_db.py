@@ -7,12 +7,12 @@ django.setup()
 
 from AppParts.models import Marks, Models
 
+# Загрузка JSON данных
 with open('to_db_2.json', 'r', encoding='utf-8') as file:
     json_data = json.load(file)
 
+# Создаем и сохраняем объекты Marks
 marks_list = []
-models_list = []
-
 for mark_data in json_data:
     mark = Marks(
         mark_name=mark_data['mark_name'],
@@ -20,6 +20,16 @@ for mark_data in json_data:
     )
     marks_list.append(mark)
 
+# Сохраняем объекты Marks в базу данных
+Marks.objects.bulk_create(marks_list)
+
+# Получаем сохраненные объекты Marks из базы данных
+saved_marks = {mark.mark_name: mark for mark in Marks.objects.all()}
+
+# Создаем объекты Models, используя сохраненные объекты Marks
+models_list = []
+for mark_data in json_data:
+    mark = saved_marks[mark_data['mark_name']]
     for model_data in mark_data['models']:
         model = Models(
             model_name=model_data['model_name'],
@@ -28,7 +38,5 @@ for mark_data in json_data:
         )
         models_list.append(model)
 
-# Используйте bulk_create для эффективной вставки данных в базу данных
-Marks.objects.bulk_create(marks_list)
+# Сохраняем объекты Models в базу данных
 Models.objects.bulk_create(models_list)
-

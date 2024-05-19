@@ -21,7 +21,7 @@ class Marks(models.Model):
 
 class Models(models.Model):
     model_id = models.AutoField(primary_key=True)
-    model_name = models.CharField(max_length=20, verbose_name='Название')
+    model_name = models.CharField(max_length=200, verbose_name='Название')
     image_url_model = models.ImageField(upload_to='model_media', verbose_name='Изображение')
     mark = models.ForeignKey(Marks, on_delete=models.CASCADE, verbose_name='Марка')
 
