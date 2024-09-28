@@ -1,6 +1,6 @@
 # BelAutoParts
 
-## Web-Приложение по продаже автозапчастей на Django/Bootstrap
+### Web-Приложение по продаже автозапчастей на Django/Bootstrap
 
 ![](screenshot/1.png)
 ![](screenshot/2.png)
